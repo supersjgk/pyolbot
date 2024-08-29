@@ -1,0 +1,5 @@
+{
+    "chromedriver_path": "D:\\pybusy\\chromedriver-win64\\chromedriver.exe",
+    "min_cursor_change": 30,
+    "max_cursor_change": 45
+}
