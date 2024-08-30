@@ -1,6 +1,5 @@
 import os
 import sys
-import io
 from selenium import webdriver
 import platform
 import zipfile
@@ -27,12 +26,6 @@ def get_chromedriver_url():
         syst = "win64"
     elif "win" in _system_name and "32" in _system_arch:
         syst = "win32"
-    elif "linux" in _system_name:
-        syst = "linux64"
-    elif "mac" in _system_name and "arm" in _system_arch:
-        syst = "mac-arm64"
-    elif "mac" in _system_name and "x" in _system_arch:
-        syst = "mac-x64"
     else:
         print("Error getting platform info..")
         sys.exit(1)

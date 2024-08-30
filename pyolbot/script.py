@@ -1,4 +1,3 @@
-# import argparse
 import json
 import os
 from selenium import webdriver
@@ -8,20 +7,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 import random
 import time
+from chrome_session import persistent_chrome_session
 
-def load_config(config_path):
-    with open(config_path, 'r') as f:
-        return json.load(f)
-
-def setup_driver(chromedriver_path):
+def setup_driver(chromedriver_path, chrome_port):
     chrome_options = Options()
-    chrome_options.add_argument("--disable-notifications")
-    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_port_val = "localhost:" + str(chrome_port)
+    chrome_options.add_experimental_option("debuggerAddress", chrome_port_val)
+    # chrome_options.add_argument("--disable-notifications")
+    # chrome_options.add_argument("--disable-popup-blocking")
 
     service = Service(chromedriver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
+def open_persistent_chrome(config):
+    persistent_chrome_session()
+    
 def check_login(driver):
     try:
         login_btn = driver.find_element(By.XPATH, "//li[@class='secondary']/a[contains(@href, '/login')]")
@@ -34,7 +35,7 @@ def check_login(driver):
 
         google_login.click()
 
-        time.sleep(10)
+        time.sleep(5)
 
     except Exception as e:
         print(f"Logged in or exception {e}")
@@ -53,16 +54,14 @@ def click_randomly(driver, min_cursor_change, max_cursor_change):
         time.sleep(random.uniform(min_cursor_change, max_cursor_change))
 
 def main():
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--config', type=str, required=True, help="Path to config file")
-    # args = parser.parse_args()
-    # config = load_config(args.config)
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(cur_dir, f"config.json")
     with open(config_path, 'r') as f:
         config = json.load(f)
 
-    driver = setup_driver(config["chromedriver_path"])
+    open_persistent_chrome(config)
+
+    driver = setup_driver(config["chromedriver_path"], config["chrome_port"])
     min_cursor_change, max_cursor_change = config["min_cursor_change"], config["max_cursor_change"]
     
     try:
@@ -78,4 +77,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
