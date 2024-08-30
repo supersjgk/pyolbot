@@ -2,3 +2,6 @@ venv/
 todo.txt
 pyolbot/chromedriver-*
 pyolbot/chromeprofile/
+__pycache__/
+*.pyc
+*.pyo
