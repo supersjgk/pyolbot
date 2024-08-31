@@ -69,9 +69,4 @@ def get_set_chromedriver():
     
     print("config.json updated...")
 
-
-def main():
-    get_set_chromedriver()
-
-if __name__ == "__main__":
-    main()
+# get_set_chromedriver()

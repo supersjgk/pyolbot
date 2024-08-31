@@ -28,8 +28,8 @@ def persistent_chrome_session():
         f"--user-data-dir={chrome_profile_dir}"
         ]
     try:
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"{e}")    
+        subprocess.Popen(cmd)
+    except Exception as e:
+        print(f"Error: {e}")    
 
 # persistent_chrome_session()

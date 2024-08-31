@@ -5,16 +5,21 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import random
 import time
+import win32cred
+from driver_manager import get_set_chromedriver
 from chrome_session import persistent_chrome_session
 
 def setup_driver(chromedriver_path, chrome_port):
+    get_set_chromedriver()
     chrome_options = Options()
     chrome_port_val = "localhost:" + str(chrome_port)
     chrome_options.add_experimental_option("debuggerAddress", chrome_port_val)
-    # chrome_options.add_argument("--disable-notifications")
-    # chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-popup-blocking")
 
     service = Service(chromedriver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
@@ -24,21 +29,42 @@ def open_persistent_chrome(config):
     persistent_chrome_session()
     
 def check_login(driver):
+    def get_credentials(target_name):
+        try:
+            cred = win32cred.CredRead(target_name, win32cred.CRED_TYPE_GENERIC)
+            email = cred['UserName']
+            passwd = cred['CredentialBlob'].decode('utf-8')
+            return email, passwd
+        except Exception as e:
+            raise ValueError(f"Error: {e}")
+
+    wait = WebDriverWait(driver, 2)
+    target_name = "OverleafBot"
+
     try:
-        login_btn = driver.find_element(By.XPATH, "//li[@class='secondary']/a[contains(@href, '/login')]")
-        print("Logged out")
+        login_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//li[@class='secondary']/a[contains(@href, '/login')]")))
+        print("Logged out...")
+        login_btn.click()
+        time.sleep(1)
 
-        driver.get("https://www.overleaf.com/login")
+        email, passwd = get_credentials(target_name)
 
-        google_login = driver.find_element(By.XPATH, "//a[contains(@href, '/auth/google?intent=sign_in')]")
-        print("Logging with Google")
+        email_field = wait.until(EC.element_to_be_clickable(driver.find_element(By.ID, "email")))
+        email_field.click()
+        email_field.send_keys(email)
+        time.sleep(1)
 
-        google_login.click()
+        password_field = wait.until(EC.element_to_be_clickable(driver.find_element(By.ID, "password")))
+        password_field.click()
+        password_field.send_keys(passwd)
+        time.sleep(1)
 
-        time.sleep(5)
+        click_login = wait.until(EC.element_to_be_clickable(By.XPATH, "//button[contains(@class='btn-primary') and contains(@type='submit')]"))
+        click_login.click()
+        time.sleep(1)
 
     except Exception as e:
-        print(f"Logged in or exception {e}")
+        print(f"Logged in or exception {e} during login")
         
 def click_randomly(driver, min_cursor_change, max_cursor_change):
     body = driver.find_element(By.TAG_NAME, 'body')
@@ -56,6 +82,7 @@ def click_randomly(driver, min_cursor_change, max_cursor_change):
 def main():
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(cur_dir, f"config.json")
+
     with open(config_path, 'r') as f:
         config = json.load(f)
 
@@ -67,8 +94,9 @@ def main():
     try:
         driver.get("https://www.overleaf.com")
         check_login(driver)
-        time.sleep(10)
-        click_randomly(driver, min_cursor_change, max_cursor_change)
+        print("Logged in successfully...")
+        time.sleep(2)
+        # click_randomly(driver, min_cursor_change, max_cursor_change)
 
     except Exception as e:
         print(f"Error: {e}")

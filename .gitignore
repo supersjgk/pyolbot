@@ -5,3 +5,4 @@ pyolbot/chromeprofile/
 __pycache__/
 *.pyc
 *.pyo
+pyolbot/temp.py
