@@ -156,8 +156,21 @@ def open_project(current_overleaf_project_id):
             time.sleep(1)
             break
     print("Project Opened successfully...")
-        
-def click_randomly(driver, min_cursor_change, max_cursor_change):
+
+def get_lines():
+    wait = WebDriverWait(driver, 1)
+    line_num_element = wait.until(EC.element_to_be_clickable(driver.find_element(By.CSS_SELECTOR, '#ide-root > div.ide-react-main > div > div > div:nth-child(3) > div > div.ide-react-panel > div > div:nth-child(1) > div > div > div > div > div > div.cm-scroller > div.cm-gutters > div.cm-gutter.cm-lineNumbers')))
+    line_nums = line_num_element.find_elements(By.CLASS_NAME, 'cm-gutterElement')
+    num_lines = len(line_nums)-1
+    print(f"Total number of lines in this project: {num_lines}")
+    return line_nums, num_lines
+    
+def select_random_line(line_nums, num_lines):
+    choice = random.randint(1, num_lines)
+    line_nums[choice-1].click()
+    print(f"Selected line number {choice-1}...")
+
+def click_randomly():
     pass
 
 def load_config():
@@ -201,7 +214,12 @@ def main():
         update_config(config)
         time.sleep(0.5)
         open_project(config["current_overleaf_project_id"])
-        
+        line_nums, num_lines = get_lines()
+        cur_time = time.time()
+        while time.time() < cur_time + 20:
+            select_random_line(line_nums, num_lines)
+            time.sleep(random.randint(3,7))
+        # print("done...")
         time.sleep(20)
 
     except Exception as e:
