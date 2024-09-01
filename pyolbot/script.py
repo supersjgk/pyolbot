@@ -192,12 +192,14 @@ def update_config(config):
 def main():
     parser = argparse.ArgumentParser(description='Overleaf automation.')
     parser.add_argument('--project_id', required=False, help='Overleaf Project ID')
+    parser.add_argument('--duration', required=False, help='Period of time to appear active (in minutes)')
     args = parser.parse_args()
     config = load_config()    
 
     # open_persistent_chrome(config)
     global driver
     driver = setup_driver(config, update=False)
+    duration = 5*args.duration if args.duration else 120
     # min_cursor_change, max_cursor_change = config["min_cursor_change"], config["max_cursor_change"]
     
     try:
@@ -216,7 +218,7 @@ def main():
         open_project(config["current_overleaf_project_id"])
         line_nums, num_lines = get_lines()
         cur_time = time.time()
-        while time.time() < cur_time + 20:
+        while time.time() < cur_time + duration:
             select_random_line(line_nums, num_lines)
             time.sleep(random.randint(3,7))
         # print("done...")

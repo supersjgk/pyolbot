@@ -36,5 +36,18 @@ pyolbot is built to help users appear active on collaborative Overleaf projects.
             - [x] Manage credentials securely
             - [x] Select project you want to work on
             - [x] Appear active
+            - [ ] Headless Mode
     - [ ] Linux (in progress)
     - [ ] Mac (who uses Mac?)
+
+### One time setup
+- Prerequisites: Windows with Python and Chrome browser installed.
+- Clone the repository: `git clone https://github.com/supersjgk/pyolbot`
+- `cd pyolbot`
+- Install the dependencies: `pip install -r requirements.txt`
+- `cd pyolbot`
+- Set Credentials in Windows Credential Manager by running: `python credential_manager.py set OverleafBot`
+- Run the script: 
+    - The Bot displays the available projects and prompts you to select: `python script.py` 
+    - If you know the Overleaf Project ID: `python script.py --project_id <Project ID>`
+    - If you want to appear active for x minutes, append `--duration <x>` to any of the above two options, else it will run for 5 minutes.
