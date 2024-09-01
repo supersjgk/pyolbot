@@ -8,7 +8,3 @@ def find_chrome_path():
             return chrome_path
     except FileNotFoundError:
         return None
-
-chrome_path = find_chrome_path()
-print(chrome_path)
-
