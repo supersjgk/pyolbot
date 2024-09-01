@@ -6,4 +6,4 @@ __pycache__/
 *.pyc
 *.pyo
 pyolbot/temp.py
-pyolbot/chrome_profile_dir/
+
