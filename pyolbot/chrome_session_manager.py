@@ -1,4 +1,4 @@
-from chrome_finder import find_chrome_path
+from path_finder import find_chrome_path
 import json
 import os
 import subprocess

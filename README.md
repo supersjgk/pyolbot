@@ -28,7 +28,7 @@ pyolbot is built to help users appear active on collaborative Overleaf projects.
         - Broswers:
             - [x] Chrome
             - [ ] Others
-        - Scheduling:
+        - Scheduling (in progress):
             - [ ] Scheduled Runs when power on (logged in/logged out)
             - [ ] Scheduled Runs when power off
         - Functionalities:
