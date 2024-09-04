@@ -199,7 +199,7 @@ def main():
     # open_persistent_chrome(config)
     global driver
     driver = setup_driver(config, update=False)
-    duration = 5*args.duration if args.duration else 120
+    duration = 60*args.duration if args.duration else 120
     # min_cursor_change, max_cursor_change = config["min_cursor_change"], config["max_cursor_change"]
     
     try:
@@ -218,7 +218,7 @@ def main():
         open_project(config["current_overleaf_project_id"])
         line_nums, num_lines = get_lines()
         cur_time = time.time()
-        while time.time() < cur_time + duration:
+        while time.time() < cur_time + float(duration):
             select_random_line(line_nums, num_lines)
             time.sleep(random.randint(3,7))
         # print("done...")
@@ -234,5 +234,6 @@ if __name__ == "__main__":
         Usage: 
         - If you want to be prompted to select the projects in terminal ->      python script.py
         - If you know the Overleaf project ID ->                                python script.py --project_id <Project ID>
+        - To run it for <x> minutes (default 5), append to any of the above ->  --duration <x>
     """
     main()

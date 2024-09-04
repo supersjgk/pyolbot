@@ -6,4 +6,6 @@ __pycache__/
 *.pyc
 *.pyo
 pyolbot/temp.py
+pyolbot/wifi.ps1
+pyolbot/scheduler.py
 
