@@ -5,5 +5,6 @@
     "chrome_port": 8765,
     "chrome_path": "C:\\Program Files (x86)\\Google\\Chrome\\Application",
     "chrome_profile_dir": "D:\\pyolbot\\pyolbot\\chromeprofile",
+    "python_path": "C:\\Program Files\\Python311\\python.exe",
     "current_overleaf_project_id": ""
 }
