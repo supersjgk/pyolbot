@@ -1,11 +1,10 @@
 venv/
 todo.txt
-pyolbot/chromedriver-*
-pyolbot/chromeprofile/
+pyoverleafbot/chromedriver-*
+pyoverleafbot/chromeprofile/
 __pycache__/
 *.pyc
 *.pyo
-pyolbot/temp.py
-pyolbot/wifi.ps1
-pyolbot/scheduler.py
-
+pyoverleafbot/temp.py
+pyoverleafbot/wifi.ps1
+pyoverleafbot/scheduler.py

@@ -1,7 +1,7 @@
-# Overleaf Automation Bot (pyolbot)
+# Overleaf Automation Bot to Appear Active (pyoverleafbot)
 
 ### Overview
-pyolbot is built to help users appear active on collaborative Overleaf projects. It automates iinteractions with Overleaf.
+pyoverleafbot is built to help users appear active on collaborative Overleaf projects. It automates iinteractions with Overleaf.
 
 ### Tech Stack
 - Python
@@ -42,10 +42,10 @@ pyolbot is built to help users appear active on collaborative Overleaf projects.
 
 ### One time setup
 - Prerequisites: Windows with Python and Chrome browser installed.
-- Clone the repository: `git clone https://github.com/supersjgk/pyolbot`
-- `cd pyolbot`
+- Clone the repository: `git clone https://github.com/supersjgk/pyoverleafbot`
+- `cd pyoverleafbot`
 - Install the dependencies: `pip install -r requirements.txt`
-- `cd pyolbot`
+- `cd pyoverleafbot`
 - Set Credentials in Windows Credential Manager by running: `python credential_manager.py set OverleafBot`
 - Run the script: 
     - The Bot displays the available projects and prompts you to select: `python script.py` 

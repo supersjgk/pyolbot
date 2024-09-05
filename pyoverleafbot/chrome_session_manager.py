@@ -5,7 +5,6 @@ import subprocess
 
 def persistent_chrome_session():
     chrome_path = find_chrome_path()
-    # cur_dir = os.path.dirname(os.path.abspath(__file__))
     cur_dir = os.getcwd()
     chrome_profile_dir = os.path.join(cur_dir, r'chromeprofile')
     if not os.path.exists(chrome_profile_dir):
