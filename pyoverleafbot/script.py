@@ -157,6 +157,7 @@ def open_project(current_overleaf_project_id):
             break
     print("Project Opened successfully...")
 
+# Gets only the line numbers, not the content
 def get_lines():
     wait = WebDriverWait(driver, 1)
     line_num_element = wait.until(EC.element_to_be_clickable(driver.find_element(By.CSS_SELECTOR, '#ide-root > div.ide-react-main > div > div > div:nth-child(3) > div > div.ide-react-panel > div > div:nth-child(1) > div > div > div > div > div > div.cm-scroller > div.cm-gutters > div.cm-gutter.cm-lineNumbers')))
@@ -164,11 +165,41 @@ def get_lines():
     num_lines = len(line_nums)-1
     print(f"Total number of lines in this project: {num_lines}")
     return line_nums, num_lines
-    
-def select_random_line(line_nums, num_lines):
+
+# Selects the beginning of a random line number
+def select_random_number_line(line_nums, num_lines):
     choice = random.randint(1, num_lines)
-    line_nums[choice-1].click()
-    print(f"Selected line number {choice-1}...")
+    print(f"Selected line number {choice}...")
+    line_nums[choice].click()
+
+# Gets the lines with content
+def get_content():
+    wait = WebDriverWait(driver, 1)
+    body_element = wait.until(EC.element_to_be_clickable(driver.find_element(By.CSS_SELECTOR, '#ide-root > div.ide-react-main > div > div > div:nth-child(3) > div > div.ide-react-panel > div > div:nth-child(1) > div > div > div > div > div > div.cm-scroller > div.cm-content.cm-lineWrapping')))
+    lines_element = body_element.find_elements(By.CLASS_NAME, 'cm-line')
+    num_lines = len(lines_element)
+    non_empty_lines = [line for line in lines_element if line.text.strip()]
+    return non_empty_lines, num_lines
+
+# Selects random position of a random line
+def select_random_line_content(non_empty_lines, num_lines):
+    choice = random.randint(0, num_lines - 1)
+    selected_line = non_empty_lines[choice]
+    print(f"Selected line {choice+1}...")
+
+    script = """
+    var range = document.createRange();
+    var selection = window.getSelection();
+    var textNode = arguments[0].childNodes[0];
+    var length = textNode.textContent.length;
+    var randonOffset = Math.floor(Math.random() * length);
+    range.setStart(textNode, randomOffset);
+    range.collapse(true);
+    selection.removeAllRanges();
+    seletion.addRange(range);
+    """
+    driver.execute_script(script, selected_line)
+    print(f"Movied on line {choice+1}")
 
 def click_randomly():
     pass
@@ -193,14 +224,15 @@ def main():
     parser = argparse.ArgumentParser(description='Overleaf automation.')
     parser.add_argument('--project_id', required=False, help='Overleaf Project ID')
     parser.add_argument('--duration', required=False, help='Period of time to appear active (in minutes)')
+    parser.add_argument('--min_change_time', required=False, default=5, type=int, help='Minimum number of seconds after which line will change')
+    parser.add_argument('--max_change_time', required=False, default=10, type=int, help='Maximum number of seconds after which line will change')
     args = parser.parse_args()
     config = load_config()    
 
     # open_persistent_chrome(config)
     global driver
     driver = setup_driver(config, update=False)
-    duration = 60*args.duration if args.duration else 120
-    # min_cursor_change, max_cursor_change = config["min_cursor_change"], config["max_cursor_change"]
+    duration = 60*args.duration if args.duration else 300
     
     try:
         driver.get("https://www.overleaf.com")
@@ -216,13 +248,19 @@ def main():
         update_config(config)
         time.sleep(0.5)
         open_project(config["current_overleaf_project_id"])
-        line_nums, num_lines = get_lines()
+        # line_nums, num_lines = get_lines()
+        # cur_time = time.time()
+        # while time.time() < cur_time + float(duration):
+        #     select_random_number_line(line_nums, num_lines)
+        #     time.sleep(random.randint(args.min_change_time, args.max_change_time))
+
+        non_empty_lines, num_lines = get_content()
         cur_time = time.time()
         while time.time() < cur_time + float(duration):
-            select_random_line(line_nums, num_lines)
-            time.sleep(random.randint(3,7))
+            select_random_line_content(non_empty_lines, num_lines)
+            time.sleep(random.randint(args.min_change_time, args.max_change_time))
         # print("done...")
-        time.sleep(20)
+        # time.sleep(20)
 
     except Exception as e:
         print(f"Error: {e}")
@@ -232,8 +270,13 @@ def main():
 if __name__ == "__main__":
     """
         Usage: 
-        - If you want to be prompted to select the projects in terminal ->      python script.py
-        - If you know the Overleaf project ID ->                                python script.py --project_id <Project ID>
-        - To run it for <x> minutes (default 5), append to any of the above ->  --duration <x>
+        - If you want to be prompted to select the projects in terminal:
+            python script.py
+        - If you know the Overleaf project ID, run:
+            python script.py --project_id <Project ID>
+        - To run it for <x> minutes (default 5), use argument:
+            --duration <x>
+        - This code repeatedly selects a random line (every 5 to 10 seconds) to appear active/busy. To override default values, use arguments:
+            --min_change_time <min_seconds> --max_change_time <max_seconds>
     """
     main()

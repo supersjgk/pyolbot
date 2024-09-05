@@ -48,6 +48,7 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
 - `cd pyoverleafbot`
 - Set Credentials in Windows Credential Manager by running: `python credential_manager.py set OverleafBot`
 - Run the script: 
-    - The Bot displays the available projects and prompts you to select: `python script.py` 
+    - The Bot displays the available overleaf projects and prompts you to select: `python script.py` 
     - If you know the Overleaf Project ID: `python script.py --project_id <Project ID>`
-    - If you want to appear active for x minutes, append `--duration <x>` to any of the above two options, else it will run for 5 minutes.
+    - If you want to appear active for x minutes (default 5 minutes), use the argument `--duration <x>`
+    - The bot repeatedly selects a random line (every 5 to 10 seconds) in the project to appear active. To override default values, use the arguments: `--min_change_time <min_seconds> --max_change_time <max_seconds>`

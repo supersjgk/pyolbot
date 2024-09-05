@@ -1,7 +1,5 @@
 {
     "chromedriver_path": "D:\\pyoverleafbot\\pyoverleafbot\\chromedriver-win64\\chromedriver.exe",
-    "min_cursor_change": 15,
-    "max_cursor_change": 45,
     "chrome_port": 8765,
     "chrome_path": "C:\\Program Files (x86)\\Google\\Chrome\\Application",
     "chrome_profile_dir": "D:\\pyoverleafbot\\pyoverleafbot\\chromeprofile",
