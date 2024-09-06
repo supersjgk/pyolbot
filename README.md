@@ -1,7 +1,7 @@
 # Overleaf Automation Bot to Appear Active (pyoverleafbot)
 
 ### Overview
-pyoverleafbot is built to help users appear active on collaborative Overleaf projects. It automates iinteractions with Overleaf.
+pyoverleafbot is built to help users appear active on collaborative Overleaf projects. It automates interactions with Overleaf.
 
 ### Tech Stack
 - Python
@@ -23,8 +23,8 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
 - Platforms:
     - [x] Windows
         - Robust Login:
-            - [x] Windows Credential Manager + Store session information for faster login
-            - [ ] Gmail
+            - [x] Windows Credential Manager (using email & password)+ Store session information for faster login
+            - [ ] Gmail login
         - Broswers:
             - [x] Chrome
             - [ ] Others
@@ -36,9 +36,9 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
             - [x] Manage credentials securely
             - [x] Select project you want to work on
             - [x] Appear active
-            - [ ] Headless Mode
+            - [x] Headless Mode
     - [ ] Linux (in progress)
-    - [ ] Mac (who uses Mac?)
+    - [ ] Mac (in progress)
 
 ### One time setup
 - Prerequisites: Windows with Python and Chrome browser installed.
@@ -48,7 +48,8 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
 - `cd pyoverleafbot`
 - Set Credentials in Windows Credential Manager by running: `python credential_manager.py set OverleafBot`
 - Run the script: 
-    - The Bot displays the available overleaf projects and prompts you to select: `python script.py` 
-    - If you know the Overleaf Project ID: `python script.py --project_id <Project ID>`
+    - The Bot displays the available overleaf projects and prompts you to select a project: `python script.py`
+    - To run the script in headless mode (Uses less resources, Browser GUI will not be displayed, the script still runs normally), use argument: `--headless 1`
+    - If you already know the Overleaf Project ID: `python script.py --project_id <Project ID>`
     - If you want to appear active for x minutes (default 5 minutes), use the argument `--duration <x>`
-    - The bot repeatedly selects a random line (every 5 to 10 seconds) in the project to appear active. To override default values, use the arguments: `--min_change_time <min_seconds> --max_change_time <max_seconds>`
+    - The bot repeatedly selects a random line (every 5 to 10 seconds) in the project to appear active. To override default values, use the arguments: `--min_change_time <min_seconds> --max_change_time <max_seconds>`. It is recommended to set them to atleast 45 and 60, respectively to make it look more natural.

@@ -16,14 +16,15 @@ import csv
 import argparse
 # from chrome_session import persistent_chrome_session
 
-def setup_driver(config, update=False):
+def setup_driver(config, use_headless_mode=False, update=False):
     chromedriver_path = config["chromedriver_path"]
     chrome_profile_dir = config["chrome_profile_dir"]
     
     if "chromedriver.exe" not in chromedriver_path or update:
         get_set_chromedriver()
     chrome_options = Options()
-
+    if use_headless_mode:
+        chrome_options.add_argument("--headless")
     # to connect to an existing chrome tab
     # chrome_port_val = "127.0.0.1:" + str(chrome_port)
     # print(chrome_port_val)
@@ -42,7 +43,6 @@ def setup_driver(config, update=False):
     chrome_options.add_experimental_option("prefs", pref)
 
     service = Service(chromedriver_path)
-    # global driver
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
@@ -230,6 +230,7 @@ def update_config(config):
 
 def main():
     parser = argparse.ArgumentParser(description='Overleaf automation.')
+    parser.add_argument('--headless', required=False, default=0, type=int, help='Browser GUI is not rendered in headless mode. Script still runs normally')
     parser.add_argument('--project_id', required=False, help='Overleaf Project ID')
     parser.add_argument('--duration', required=False, help='Period of time to appear active (in minutes)')
     parser.add_argument('--min_change_time', required=False, default=5, type=int, help='Minimum number of seconds after which line will change')
@@ -238,8 +239,9 @@ def main():
     config = load_config()    
 
     # open_persistent_chrome(config)
+    use_headless_mode = True if args.headless == 1 else False
     global driver
-    driver = setup_driver(config, update=False)
+    driver = setup_driver(config, use_headless_mode, update=False)
     duration = 60*args.duration if args.duration else 300
     
     try:
@@ -280,6 +282,8 @@ if __name__ == "__main__":
         Usage: 
         - If you want to be prompted to select the projects in terminal:
             python script.py
+        - To run the script in headless mode (Broswer GUI will not be displayed, user will still appear active), add argument:
+            --headless 1
         - If you know the Overleaf project ID, run:
             python script.py --project_id <Project ID>
         - To run it for <x> minutes (default 5), use argument:
