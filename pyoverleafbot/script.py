@@ -177,8 +177,8 @@ def get_content():
     wait = WebDriverWait(driver, 1)
     body_element = wait.until(EC.element_to_be_clickable(driver.find_element(By.CSS_SELECTOR, '#ide-root > div.ide-react-main > div > div > div:nth-child(3) > div > div.ide-react-panel > div > div:nth-child(1) > div > div > div > div > div > div.cm-scroller > div.cm-content.cm-lineWrapping')))
     lines_element = body_element.find_elements(By.CLASS_NAME, 'cm-line')
-    num_lines = len(lines_element)
     non_empty_lines = [line for line in lines_element if line.text.strip()]
+    num_lines = len(non_empty_lines)
     return non_empty_lines, num_lines
 
 # Selects random position of a random line
@@ -190,19 +190,27 @@ def select_random_line_content(non_empty_lines, num_lines):
     script = """
     var range = document.createRange();
     var selection = window.getSelection();
-    var textNode = arguments[0].childNodes[0];
-    var length = textNode.textContent.length;
-    var randonOffset = Math.floor(Math.random() * length);
-    range.setStart(textNode, randomOffset);
-    range.collapse(true);
-    selection.removeAllRanges();
-    seletion.addRange(range);
+    var textNodes = [];
+    var walker = document.createTreeWalker(arguments[0], NodeFilter.SHOW_TEXT, null, false);
+    
+    while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+    }
+    
+    if (textNodes.length > 0) {
+        var textNode = textNodes[0];
+        var length = textNode.textContent.length;
+        var randomOffset = Math.floor(Math.random() * length);
+        range.setStart(textNode, randomOffset);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } else {
+        console.log("No text nodes found in the selected line.");
+    }
     """
     driver.execute_script(script, selected_line)
-    print(f"Movied on line {choice+1}")
-
-def click_randomly():
-    pass
+    print(f"Moved on line {choice+1}")
 
 def load_config():
     cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -260,7 +268,7 @@ def main():
             select_random_line_content(non_empty_lines, num_lines)
             time.sleep(random.randint(args.min_change_time, args.max_change_time))
         # print("done...")
-        # time.sleep(20)
+        time.sleep(5)
 
     except Exception as e:
         print(f"Error: {e}")

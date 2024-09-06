@@ -5,6 +5,6 @@ pyoverleafbot/chromeprofile/
 __pycache__/
 *.pyc
 *.pyo
+pyoverleafbot/scheduler.py
 pyoverleafbot/temp.py
 pyoverleafbot/wifi.ps1
-pyoverleafbot/scheduler.py
