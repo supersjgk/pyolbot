@@ -21,11 +21,11 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
 
 ### Implementations
 - Platforms:
-    - [x] Windows
+    - [x] Windows (Currently only implemented for Windows OS)
         - Robust Login:
-            - [x] Windows Credential Manager (using email & password)+ Store session information for faster login
+            - [x] Windows Credential Manager (using email & password) + Store session information for faster login
             - [ ] Gmail login
-        - Broswers:
+        - Browsers:
             - [x] Chrome
             - [ ] Others
         - Scheduling (in progress):
@@ -53,3 +53,6 @@ pyoverleafbot is built to help users appear active on collaborative Overleaf pro
     - If you already know the Overleaf Project ID: `python script.py --project_id <Project ID>`
     - If you want to appear active for x minutes (default 5 minutes), use the argument `--duration <x>`
     - The bot repeatedly selects a random line (every 5 to 10 seconds) in the project to appear active. To override default values, use the arguments: `--min_change_time <min_seconds> --max_change_time <max_seconds>`. It is recommended to set them to atleast 45 and 60, respectively to make it look more natural.
+
+### Something not working?
+- Please create Issue in [Github Repository](https://github.com/supersjgk/pyoverleafbot/issues)
